@@ -70,25 +70,28 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: var(--spacing-2xl);
-  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
   background: var(--surface-color);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
 }
 
 .header-content h1.form-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
+  margin-top: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
   letter-spacing: -0.025em;
 }
 
 .form-subtitle {
-  font-size: 1.125rem;
+  font-size: .9rem;
   color: var(--text-secondary);
   font-weight: 400;
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
 }
 
 /* Progress Indicator */
@@ -148,7 +151,7 @@ body {
 .section-header {
   display: flex;
   align-items: center;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-sm);
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
 }
@@ -161,7 +164,8 @@ body {
   height: 48px;
   background: rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-lg);
-  margin-right: var(--spacing-lg);
+  margin-right: var(--spacing-md);
+  margin-left: var(--spacing-md);
   backdrop-filter: blur(10px);
 }
 
@@ -172,6 +176,7 @@ body {
 .section-title h2 {
   font-size: 1.5rem;
   font-weight: 600;
+  margin-top: var(--spacing-xs);
   margin-bottom: var(--spacing-xs);
   letter-spacing: -0.025em;
 }
@@ -180,6 +185,7 @@ body {
   font-size: 0.875rem;
   opacity: 0.9;
   font-weight: 300;
+  margin-bottom: var(--spacing-xs);
 }
 
 /* Section Content */

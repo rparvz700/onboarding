@@ -12,6 +12,11 @@
     <div class="container">
         <!-- Header Section -->
         <div class="form-header">
+            <div>
+                <a class="navbar-brand logo-icon"> 
+                    <img src="https://scommlife.summitcommunications.net/custom/img/logo.png" alt="" style="width:150px; position: relative; transform: translateY(-3px);">
+                </a>
+            </div>
             <div class="header-content">
                 <h1 class="form-title">Employee Information Form</h1>
                 <p class="form-subtitle">Please fill in all required information accurately</p>
@@ -173,7 +178,7 @@
                                         </label>
                                     </div>
                                     <div class="file-preview" id="passport_photo_preview">
-                                        <img class="file-preview-image" id="passport_photo_img" src="" alt="Preview">
+                                        <img class="file-preview-image" id="passport_photo_img" src="" alt="Preview" onclick="openImageModal(this.src, 'Passport Photo')">
                                         <div class="file-preview-info">
                                             <div class="file-preview-name" id="passport_photo_name"></div>
                                             <div class="file-preview-size" id="passport_photo_size"></div>
@@ -209,7 +214,7 @@
                                         </label>
                                     </div>
                                     <div class="file-preview" id="signature_preview">
-                                        <img class="file-preview-image" id="signature_img" src="" alt="Preview">
+                                        <img class="file-preview-image" id="signature_img" src="" alt="Preview" onclick="openImageModal(this.src, 'Signature')">
                                         <div class="file-preview-info">
                                             <div class="file-preview-name" id="signature_name"></div>
                                             <div class="file-preview-size" id="signature_size"></div>
@@ -757,6 +762,140 @@
     </div>
 </div>
 
+<!-- Image Preview Modal -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+    <span class="modal-close">&times;</span>
+    <div class="modal-content-wrapper">
+        <img class="modal-content" id="modalImage">
+        <div id="modalCaption"></div>
+    </div>
+</div>
+
+<style>
+/* Image Modal Styles */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content-wrapper {
+    position: relative;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px 20px;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    animation: zoomIn 0.3s ease-in-out;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+    z-index: 10000;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+    color: #bbb;
+}
+
+#modalCaption {
+    margin-top: 20px;
+    text-align: center;
+    color: #ccc;
+    font-size: 18px;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+}
+
+/* Add cursor pointer to preview images */
+.file-preview-image {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.file-preview-image:hover {
+    transform: scale(1.05);
+}
+</style>
+<style>
+.form-actions-section {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -100;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out, background 0.4s ease-in-out, z-index 0s 0.4s;
+}
+
+.form-actions-section.top {
+    z-index: -100;
+    transform: translateY(100%);
+    opacity: 0;
+    background: #cb1b1b75 !important;
+}
+
+.form-actions-section.scrolled {
+    z-index: 100;
+    transform: translateY(0);
+    opacity: 1;
+    background: #ffffff10 !important;
+    box-shadow: 0 -4px 20px rgba(98, 98, 98, 0.95);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out, background 0.4s ease-in-out, z-index 0s;
+}
+
+.form-actions-section.bottom {
+    position: sticky;
+    z-index: 100;
+    transform: translateY(0);
+    opacity: 1;
+    background: #ffffffff !important;
+    box-shadow: none;
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out, background 0.4s ease-in-out, z-index 0s;
+}
+
+.form-actions-content {
+    background: #ffffff77 !important;
+    padding: 10px 10px !important;
+}
+</style>
 @push('scripts')
 <script>
     // Employee data for JavaScript use
@@ -1012,8 +1151,8 @@
         const nameEl = document.getElementById(inputId + '_name');
         const sizeEl = document.getElementById(inputId + '_size');
 
-        // Set the image source to the file path
-        img.src = filePath;
+        // Set the image source to the file path with proper URL
+        img.src = '{{ asset("storage") }}/' + filePath;
         nameEl.textContent = filePath.split('/').pop(); // Extract filename
         sizeEl.textContent = 'Existing file';
         
@@ -1063,12 +1202,12 @@
         updateProgress();
         
         // Smooth scrolling for form sections
-        const sections = document.querySelectorAll('.form-section');
-        sections.forEach(section => {
-            section.addEventListener('click', function() {
-                this.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            });
-        });
+        // const sections = document.querySelectorAll('.form-section');
+        // sections.forEach(section => {
+        //     section.addEventListener('click', function() {
+        //         this.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        //     });
+        // });
     });
 </script>
 <!-- JavaScript for File Upload Functionality -->
@@ -1218,6 +1357,82 @@ function formatFileSize(bytes) {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
-</script>
 
+// Image Modal Functions
+function openImageModal(imageSrc, caption) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    
+    modal.style.display = 'block';
+    modalImg.src = imageSrc;
+    modalCaption.textContent = caption;
+    
+    // Prevent body scrolling when modal is open
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.style.display = 'none';
+    
+    // Re-enable body scrolling
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeImageModal();
+    }
+});
+
+</script>
+<script>
+let lastScrollY = window.scrollY;
+let ticking = false;
+
+function updateActionBar() {
+    const actionSection = document.querySelector('.form-actions-section');
+    const scrollY = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    const bottomThreshold = scrollHeight - windowHeight - 200;
+    
+    // Remove all classes first for clean transition
+    actionSection.classList.remove('top', 'scrolled', 'bottom');
+    
+    // Force reflow to ensure transition works
+    void actionSection.offsetWidth;
+    
+    if (scrollY < 500) {
+        console.log("-----TOP------");
+        actionSection.classList.add('top');
+    } else if (scrollY >= 200 && scrollY < bottomThreshold) {
+        console.log("-----SCROLL------");
+        actionSection.classList.add('scrolled');
+    } else {
+        console.log("-----BOTTOM------");
+        actionSection.classList.add('bottom');
+    }
+    
+    ticking = false;
+}
+
+window.addEventListener('scroll', function() {
+    lastScrollY = window.scrollY;
+    
+    if (!ticking) {
+        window.requestAnimationFrame(function() {
+            updateActionBar();
+        });
+        ticking = true;
+    }
+});
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateActionBar();
+});
+</script>
 @endpush
